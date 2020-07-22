@@ -112,6 +112,20 @@ class Utils:
             data = json.load(json_file)
         return data
 
+    def print_validation_errors(self, url):
+        validation_response = self.get_request(url)
+        if "validationChecks" in validation_response:
+            failed_tasks = list(
+                filter(lambda x: x["resultStatus"] == "FAILED", validation_response["validationChecks"]))
+            for failed_task in failed_tasks:
+                self.printRed(failed_task['description'] + ' ' + 'failed')
+                if "errorResponse" in failed_task and "message" in failed_task["errorResponse"]:
+                    self.printRed(failed_task["errorResponse"]["message"])
+                if "nestedValidationChecks" in failed_task:
+                    for nested_task in failed_task["nestedValidationChecks"]:
+                        if "errorResponse" in nested_task and "message" in nested_task["errorResponse"]:
+                            self.printRed(nested_task["errorResponse"]["message"])
+
     def password_check(self, pwd, cannotbe = None):
         #rule: minlen = 8, maxlen = 32, at least 1 number, 1 upper, 1 lower, 1 special char
         minlen = 8

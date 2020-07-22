@@ -23,6 +23,7 @@ class ClustersAutomator:
         self.utils.printGreen('Validate cluster ended with status: ' + validation_status)
         if validation_status != 'SUCCEEDED':
             self.utils.printRed ('Validation Failed.')
+            self.utils.print_validation_errors(validate_poll_url)
             exit(1)
         input("\033[1m Enter to import cluster..\033[0m")
 

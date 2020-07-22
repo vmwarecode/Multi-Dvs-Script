@@ -46,6 +46,7 @@ class DomainsAutomator:
         self.utils.printGreen('Validate domain ended with status: ' + validation_status)
         if validation_status != 'SUCCEEDED':
             self.utils.printRed('Validation Failed.')
+            self.utils.print_validation_errors(validate_poll_url)
             exit(1)
 
         # Domain Update
