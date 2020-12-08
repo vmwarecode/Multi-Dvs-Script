@@ -15,18 +15,18 @@ class Utils:
         self.header = {'Content-Type': 'application/json'}
         self.token_url = 'https://'+ self.hostname +'/v1/tokens'
         self.get_token()
-    
+
     def get_token(self):
         payload = {"username": self.username,"password": self.password}
         response = self.post_request(payload=payload,url=self.token_url)
         token = response['accessToken']
         self.header['Authorization'] = 'Bearer ' + token
-    
+
     def get_request(self,url):
         self.get_token()
         time.sleep(5)
         response = requests.get(url, headers=self.header,verify=False)
-        if(response.status_code == 200):
+        if(response.status_code == 200 or response.status_code == 202):
             data = json.loads(response.text)
         else:
             print ("Error reaching the server.")
@@ -52,7 +52,7 @@ class Utils:
             print (response.text)
             exit(1)
 
-    
+
     def patch_request(self,payload,url):
         response = requests.patch(url, headers=self.header, json=payload,verify=False)
         if(response.status_code == 202):
@@ -96,7 +96,7 @@ class Utils:
         else:
             print ('Operation failed')
             exit(1)
-    
+
     def delete_request(self,payload,url):
         response = requests.delete(url,json=payload,headers=self.header,verify=False)
         if(response.status_code == 202):
@@ -106,7 +106,7 @@ class Utils:
             print ("Error reaching the server.")
             print (response.text)
             exit(1)
-    
+
     def read_input(self, file):
         with open(file) as json_file:
             data = json.load(json_file)
